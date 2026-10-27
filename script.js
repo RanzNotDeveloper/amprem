@@ -60,8 +60,11 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 // ===== LOGIN =====
+// ===== LOGIN =====
 document.getElementById('loginForm').onsubmit = async (e) => {
   e.preventDefault();
+  alert("1. Tombol ditekan, mulai mengambil data."); // <--- TAMBAHAN
+
   const username = document.getElementById('loginUsername').value.trim();
   const password = document.getElementById('loginPassword').value;
   const errDiv = document.getElementById('loginError');
@@ -72,11 +75,15 @@ document.getElementById('loginForm').onsubmit = async (e) => {
   btn.innerHTML = 'Memeriksa...';
 
   try {
+    alert("2. Mengirim data ke server..."); // <--- TAMBAHAN
     const res = await authAPI('login', { username, password });
+    
+    alert("3. Server merespon! Data user diterima."); // <--- TAMBAHAN
     currentUser = res.user;
     sessionStorage.setItem('amprem_user', JSON.stringify({ username: currentUser.username, role: currentUser.role }));
     enterApp();
   } catch (err) {
+    alert("ERROR DARI SERVER: " + err.message); // <--- TAMBAHAN
     errDiv.textContent = err.message; 
     errDiv.classList.add('show');
   } finally {
