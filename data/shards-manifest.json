@@ -1,0 +1,8 @@
+{
+  "shards": [
+    "users.json"
+  ],
+  "currentShard": "users.json",
+  "maxUsersPerShard": 100,
+  "lastRotation": "2026-10-27T21:46:08.691Z"
+}
