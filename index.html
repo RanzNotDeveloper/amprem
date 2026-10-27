@@ -13,27 +13,22 @@
   <div class="card login-card">
     <div class="brandMark">A</div>
     
-    <div class="auth-tabs">
-      <button type="button" class="tab-btn active" data-tab="login">Masuk</button>
-      <button type="button" class="tab-btn" data-tab="register">Daftar</button>
-    </div>
-
-    <!-- Form Login -->
-    <form id="loginForm" class="auth-form active">
-      <h2>Selamat Datang</h2>
-      <p class="desc">Masuk ke akun AMPREM Anda.</p>
+    <!-- FORM LOGIN -->
+    <h2>Masuk</h2>
+    <form id="loginForm">
       <label>Username</label>
       <div class="input"><input type="text" id="loginUsername" required placeholder="username"></div>
       <label>Password</label>
       <div class="input"><input type="password" id="loginPassword" required placeholder="••••••"></div>
-      <button type="submit">Masuk <b>→</b></button>
+      <button type="submit" id="btnLogin">Masuk <b>→</b></button>
       <div class="auth-error" id="loginError"></div>
     </form>
 
-    <!-- Form Register -->
-    <form id="registerForm" class="auth-form">
-      <h2>Buat Akun Baru</h2>
-      <p class="desc">Daftar gratis sebagai user Free.</p>
+    <hr style="border-color:#333; margin: 30px 0;">
+
+    <!-- FORM DAFTAR -->
+    <h2>Buat Akun Baru</h2>
+    <form id="registerForm">
       <label>Username</label>
       <div class="input"><input type="text" id="regUsername" required placeholder="min. 4 karakter"></div>
       <label>Email</label>
@@ -42,13 +37,13 @@
       <div class="input"><input type="password" id="regPassword" required placeholder="min. 6 karakter"></div>
       <label>Konfirmasi Password</label>
       <div class="input"><input type="password" id="regPassword2" required placeholder="ulangi password"></div>
-      <button type="submit">Daftar Sekarang <b>→</b></button>
+      <button type="submit" id="btnRegister">Daftar Sekarang <b>→</b></button>
       <div class="auth-error" id="registerError"></div>
     </form>
   </div>
 </div>
 
-<!-- LAYAR APLIKASI UTAMA (Tersembunyi sebelum login) -->
+<!-- LAYAR APLIKASI UTAMA -->
 <div id="appScreen" class="screen" style="display:none;">
   <header>
     <div class="logo">AMPREM</div>
