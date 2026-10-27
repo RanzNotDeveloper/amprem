@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "username": "user_free",
+      "passwordHash": "user_free",
+      "role": "free",
+      "deviceId": null,
+      "email": null,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "expiredAt": null,
+      "adsWatched": 0
+    },
+    {
+      "username": "ranzy",
+      "passwordHash": "rkaaarnzy",
+      "role": "reseller",
+      "deviceId": null,
+      "email": null,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "expiredAt": "2030-01-01T00:00:00Z",
+      "adsWatched": 0
+    }
+  ]
+}
