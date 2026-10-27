@@ -1,1 +1,127 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AMPREM — Premium Access</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<!-- LAYAR LOGIN / DAFTAR -->
+<div id="loginScreen" class="screen active">
+  <div class="card login-card">
+    <div class="brandMark">A</div>
+    
+    <div class="auth-tabs">
+      <button type="button" class="tab-btn active" data-tab="login">Masuk</button>
+      <button type="button" class="tab-btn" data-tab="register">Daftar</button>
+    </div>
+
+    <!-- Form Login -->
+    <form id="loginForm" class="auth-form active">
+      <h2>Selamat Datang</h2>
+      <p class="desc">Masuk ke akun AMPREM Anda.</p>
+      <label>Username</label>
+      <div class="input"><input type="text" id="loginUsername" required placeholder="username"></div>
+      <label>Password</label>
+      <div class="input"><input type="password" id="loginPassword" required placeholder="••••••"></div>
+      <button type="submit">Masuk <b>→</b></button>
+      <div class="auth-error" id="loginError"></div>
+    </form>
+
+    <!-- Form Register -->
+    <form id="registerForm" class="auth-form">
+      <h2>Buat Akun Baru</h2>
+      <p class="desc">Daftar gratis sebagai user Free.</p>
+      <label>Username</label>
+      <div class="input"><input type="text" id="regUsername" required placeholder="min. 4 karakter"></div>
+      <label>Email</label>
+      <div class="input"><input type="email" id="regEmail" required placeholder="email@contoh.com"></div>
+      <label>Password</label>
+      <div class="input"><input type="password" id="regPassword" required placeholder="min. 6 karakter"></div>
+      <label>Konfirmasi Password</label>
+      <div class="input"><input type="password" id="regPassword2" required placeholder="ulangi password"></div>
+      <button type="submit">Daftar Sekarang <b>→</b></button>
+      <div class="auth-error" id="registerError"></div>
+    </form>
+  </div>
+</div>
+
+<!-- LAYAR APLIKASI UTAMA (Tersembunyi sebelum login) -->
+<div id="appScreen" class="screen" style="display:none;">
+  <header>
+    <div class="logo">AMPREM</div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <div class="secure"><b>●</b> Secure</div>
+      <button onclick="logout()" class="btn-logout" title="Logout">⏻</button>
+    </div>
+  </header>
+
+  <div id="roleBadge" class="role-badge">FREE</div>
+
+  <main>
+    <section class="card startCard">
+      <div class="progress"><i class="on"></i><i></i><i></i><i></i></div>
+
+      <!-- Step 1: Email -->
+      <div class="step show" id="emailStep">
+        <div class="icon">✦</div>
+        <h2>Mulai Sesi</h2>
+        <p class="desc">Masukkan email yang terdaftar.</p>
+        <form id="emailForm">
+          <div class="input"><input type="email" id="email" required placeholder="email@contoh.com"></div>
+          <button type="submit">Lanjut <b>→</b></button>
+        </form>
+      </div>
+
+      <!-- Step 2: Tonton Iklan -->
+      <div class="step" id="adStep">
+        <div class="icon">📺</div>
+        <h2>Tonton 5 Iklan</h2>
+        <p class="desc">Selesaikan 5 iklan reward untuk melanjutkan.</p>
+        <div class="ad-progress"><span id="adCount">0</span> / 5 Iklan</div>
+        <div id="adContainer" style="margin:15px 0; text-align:center;">
+          <button type="button" id="watchAdBtn" class="ghost" style="border:1px solid #555; margin:0;">Tonton Iklan (Klik)</button>
+        </div>
+        <button type="button" id="finishAdsBtn" disabled style="opacity:0.5;">Sudah, Lanjut <b>→</b></button>
+      </div>
+
+      <!-- Step 3: Verifikasi Link -->
+      <div class="step" id="verifyStep">
+        <div class="icon">✉</div>
+        <h2>Cek Email</h2>
+        <p class="desc">Link verifikasi telah dikirim ke email Anda.</p>
+        <form id="verifyForm">
+          <div class="input"><input type="url" id="link" required placeholder="Tempel link verifikasi..."></div>
+          <button type="submit">Verifikasi <b>→</b></button>
+        </form>
+      </div>
+
+      <!-- Step 4: Sukses -->
+      <div class="step center" id="successStep">
+        <div class="ok">✓</div>
+        <h2>Berhasil</h2>
+        <p class="desc" id="successText">Sesi Anda telah aktif.</p>
+      </div>
+    </section>
+
+    <!-- Opsi Reseller -->
+    <section class="statusCard" style="margin-top:20px;">
+      <div class="tag">UPGRADE</div>
+      <h2>Beli Akses Reseller</h2>
+      <p style="font-size:14px; color:#888;">Bebas antrian iklan. Akses penuh.</p>
+      <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
+        <a href="https://t.me/Ranzyexlnt" target="_blank" class="btn-reseller">10K / Bulan (Telegram)</a>
+        <a href="https://t.me/Ranzyexlnt" target="_blank" class="btn-reseller">25K / Tahun (Telegram)</a>
+      </div>
+      <p style="margin-top:15px; font-size:12px; color:#888;">
+        Tidak punya Telegram? <a href="https://whatsapp.com/channel/0029Vb99ZG1FHWq4FKFZO43c" target="_blank" style="color:#b6a9ff;">Masuk Saluran WhatsApp dulu</a>
+      </p>
+    </section>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
