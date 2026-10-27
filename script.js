@@ -13,16 +13,30 @@ function getDeviceId() {
 }
 
 async function authAPI(action, payload = {}) {
-  const res = await fetch(AUTH_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action, deviceId: getDeviceId(), ...payload })
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || data.success === false) {
-    throw new Error(data.message || `Request gagal (${res.status})`);
+  try {
+    const res = await fetch(AUTH_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, deviceId: getDeviceId(), ...payload })
+    });
+    
+    // Cek jika response bukan JSON (misal error 404 dari Netlify)
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      throw new Error(`Server error: ${text.substring(0, 50)}...`);
+    }
+
+    if (!res.ok || data.success === false) {
+      throw new Error(data.message || `Request gagal (${res.status})`);
+    }
+    return data;
+  } catch (err) {
+    console.error("API Error:", err);
+    throw err;
   }
-  return data;
 }
 
 let currentUser = null;
@@ -49,7 +63,9 @@ document.getElementById('loginForm').onsubmit = async (e) => {
   const errDiv = document.getElementById('loginError');
   const btn = e.target.querySelector('button');
 
-  errDiv.classList.remove('show'); btn.disabled = true; btn.innerHTML = 'Memeriksa...';
+  errDiv.classList.remove('show'); 
+  btn.disabled = true; 
+  btn.innerHTML = 'Memeriksa...';
 
   try {
     const res = await authAPI('login', { username, password });
@@ -57,9 +73,11 @@ document.getElementById('loginForm').onsubmit = async (e) => {
     sessionStorage.setItem('amprem_user', JSON.stringify({ username: currentUser.username, role: currentUser.role }));
     enterApp();
   } catch (err) {
-    errDiv.textContent = err.message; errDiv.classList.add('show');
+    errDiv.textContent = err.message; 
+    errDiv.classList.add('show');
   } finally {
-    btn.disabled = false; btn.innerHTML = 'Masuk <b>→</b>';
+    btn.disabled = false; 
+    btn.innerHTML = 'Masuk <b>→</b>';
   }
 };
 
@@ -75,10 +93,13 @@ document.getElementById('registerForm').onsubmit = async (e) => {
 
   errDiv.classList.remove('show');
   if (password !== password2) {
-    errDiv.textContent = 'Konfirmasi password tidak cocok'; errDiv.classList.add('show'); return;
+    errDiv.textContent = 'Konfirmasi password tidak cocok'; 
+    errDiv.classList.add('show'); 
+    return;
   }
 
-  btn.disabled = true; btn.innerHTML = 'Membuat akun...';
+  btn.disabled = true; 
+  btn.innerHTML = 'Membuat akun...';
 
   try {
     const res = await authAPI('register', { username, password, email });
@@ -87,9 +108,11 @@ document.getElementById('registerForm').onsubmit = async (e) => {
     alert('✅ Akun berhasil dibuat! Selamat datang, ' + username);
     enterApp();
   } catch (err) {
-    errDiv.textContent = err.message; errDiv.classList.add('show');
+    errDiv.textContent = err.message; 
+    errDiv.classList.add('show');
   } finally {
-    btn.disabled = false; btn.innerHTML = 'Daftar Sekarang <b>→</b>';
+    btn.disabled = false; 
+    btn.innerHTML = 'Daftar Sekarang <b>→</b>';
   }
 };
 
@@ -100,9 +123,11 @@ function enterApp() {
   
   const badge = document.getElementById('roleBadge');
   if (currentUser.role === 'reseller') {
-    badge.textContent = '⭐ RESELLER'; badge.classList.add('reseller');
+    badge.textContent = '⭐ RESELLER'; 
+    badge.classList.add('reseller');
   } else {
-    badge.textContent = 'FREE — Wajib 5 iklan'; badge.classList.remove('reseller');
+    badge.textContent = 'FREE — Wajib 5 iklan'; 
+    badge.classList.remove('reseller');
   }
 }
 
@@ -110,7 +135,10 @@ function enterApp() {
 window.addEventListener('DOMContentLoaded', () => {
   const saved = sessionStorage.getItem('amprem_user');
   if (saved) {
-    try { currentUser = JSON.parse(saved); if (currentUser?.username) enterApp(); } catch {}
+    try { 
+      currentUser = JSON.parse(saved); 
+      if (currentUser?.username) enterApp(); 
+    } catch {}
   }
 });
 
@@ -137,7 +165,7 @@ function showStep(stepId) {
 document.getElementById('emailForm').onsubmit = (e) => {
   e.preventDefault();
   if (currentUser.role === 'reseller') {
-    showStep('verifyStep'); // Reseller langsung loncat
+    showStep('verifyStep'); 
   } else {
     adCount = 0;
     document.getElementById('adCount').textContent = '0';
@@ -153,8 +181,7 @@ document.getElementById('emailForm').onsubmit = (e) => {
 document.getElementById('watchAdBtn').onclick = () => {
   if (adCount >= AD_TARGET) return;
   
-  // GANTI LINK DI BAWAH DENGAN LINK ADSTERRA ANDA
-  const ADSTERRA_LINK = 'https://www.effectivegatecpm.com/xxxxxx'; 
+  const ADSTERRA_LINK = 'https://www.effectivegatecpm.com/xxxxxx'; // GANTI NANTI
   window.open(ADSTERRA_LINK, '_blank');
 
   adCount++;
