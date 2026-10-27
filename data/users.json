@@ -3,11 +3,11 @@
     {
       "username": "ranzy",
       "passwordHash": "$2a$10$kabrGXaZOc87NeEcCMPOpeq6eSfPHP4HnQEGsGRF/4AJmvzmJCZWu",
-      "role": "free",
+      "role": "reseller",
       "deviceId": "dev_buauca",
       "email": "ranzy@admin.com",
       "createdAt": "2026-10-27T21:46:09.955Z",
-      "expiredAt": null,
+      "expiredAt": 2026-11-27T21:46:09.955Z,
       "adsWatched": 0
     }
   ]
