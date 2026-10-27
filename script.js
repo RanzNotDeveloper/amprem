@@ -1,89 +1,50 @@
 const AUTH_URL = "/api/auth";
-// Fungsi bantuan untuk menangkap error
-window.onerror = function(msg, url, line) {
-  alert("⚠️ ERROR TERDETEKSI:\n" + msg + "\n\nDi baris: " + line);
-  return false;
-};
-// ===== DEVICE ID =====
+
 function getDeviceId() {
   let id = localStorage.getItem('amprem_device');
   if (!id) {
-    const fp = [navigator.userAgent, screen.width, new Date().getTimezoneOffset()].join('|');
-    const hash = [...fp].reduce((a, c) => ((a << 5) - a + c.charCodeAt(0)) | 0, 0);
-    id = 'dev_' + Math.abs(hash).toString(36);
+    id = 'dev_' + Math.random().toString(36).slice(2);
     localStorage.setItem('amprem_device', id);
   }
   return id;
 }
 
 async function authAPI(action, payload = {}) {
-  try {
-    const res = await fetch(AUTH_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action, deviceId: getDeviceId(), ...payload })
-    });
-    
-    // Cek jika response bukan JSON (misal error 404 dari Netlify)
-    const text = await res.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      throw new Error(`Server error: ${text.substring(0, 50)}...`);
-    }
-
-    if (!res.ok || data.success === false) {
-      throw new Error(data.message || `Request gagal (${res.status})`);
-    }
-    return data;
-  } catch (err) {
-    console.error("API Error:", err);
-    throw err;
+  const res = await fetch(AUTH_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, deviceId: getDeviceId(), ...payload })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.success === false) {
+    throw new Error(data.message || `Request gagal (${res.status})`);
   }
+  return data;
 }
 
 let currentUser = null;
 let adCount = 0;
 const AD_TARGET = 5;
 
-// ===== TABS =====
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const tab = btn.dataset.tab;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
-    document.getElementById('loginForm').classList.toggle('active', tab === 'login');
-    document.getElementById('registerForm').classList.toggle('active', tab === 'register');
-    document.getElementById('loginError').classList.remove('show');
-    document.getElementById('registerError').classList.remove('show');
-  });
-});
-
-// ===== LOGIN =====
 // ===== LOGIN =====
 document.getElementById('loginForm').onsubmit = async (e) => {
   e.preventDefault();
-  alert("1. Tombol ditekan, mulai mengambil data."); // <--- TAMBAHAN
-
   const username = document.getElementById('loginUsername').value.trim();
   const password = document.getElementById('loginPassword').value;
   const errDiv = document.getElementById('loginError');
-  const btn = e.target.querySelector('button');
+  const btn = document.getElementById('btnLogin');
 
   errDiv.classList.remove('show'); 
   btn.disabled = true; 
   btn.innerHTML = 'Memeriksa...';
 
   try {
-    alert("2. Mengirim data ke server..."); // <--- TAMBAHAN
     const res = await authAPI('login', { username, password });
-    
-    alert("3. Server merespon! Data user diterima."); // <--- TAMBAHAN
     currentUser = res.user;
     sessionStorage.setItem('amprem_user', JSON.stringify({ username: currentUser.username, role: currentUser.role }));
+    alert('✅ Login Berhasil!');
     enterApp();
   } catch (err) {
-    alert("ERROR DARI SERVER: " + err.message); // <--- TAMBAHAN
     errDiv.textContent = err.message; 
     errDiv.classList.add('show');
   } finally {
@@ -100,7 +61,7 @@ document.getElementById('registerForm').onsubmit = async (e) => {
   const password = document.getElementById('regPassword').value;
   const password2 = document.getElementById('regPassword2').value;
   const errDiv = document.getElementById('registerError');
-  const btn = e.target.querySelector('button');
+  const btn = document.getElementById('btnRegister');
 
   errDiv.classList.remove('show');
   if (password !== password2) {
@@ -172,7 +133,6 @@ function showStep(stepId) {
   document.querySelectorAll('.progress i').forEach((bar, i) => bar.classList.toggle('on', i <= idx));
 }
 
-// ===== EMAIL -> IKLAN =====
 document.getElementById('emailForm').onsubmit = (e) => {
   e.preventDefault();
   if (currentUser.role === 'reseller') {
@@ -188,16 +148,12 @@ document.getElementById('emailForm').onsubmit = (e) => {
   }
 };
 
-// ===== TONTON IKLAN =====
 document.getElementById('watchAdBtn').onclick = () => {
   if (adCount >= AD_TARGET) return;
-  
-  const ADSTERRA_LINK = 'https://www.effectivegatecpm.com/xxxxxx'; // GANTI NANTI
+  const ADSTERRA_LINK = 'https://www.effectivegatecpm.com/xxxxxx'; 
   window.open(ADSTERRA_LINK, '_blank');
-
   adCount++;
   document.getElementById('adCount').textContent = adCount;
-
   if (adCount >= AD_TARGET) {
     document.getElementById('finishAdsBtn').disabled = false;
     document.getElementById('finishAdsBtn').style.opacity = '1';
@@ -210,7 +166,6 @@ document.getElementById('finishAdsBtn').onclick = () => {
   if (adCount >= AD_TARGET) showStep('verifyStep');
 };
 
-// ===== VERIFIKASI =====
 document.getElementById('verifyForm').onsubmit = async (e) => {
   e.preventDefault();
   showStep('successStep');
