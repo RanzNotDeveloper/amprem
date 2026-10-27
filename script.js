@@ -1,5 +1,9 @@
 const AUTH_URL = "/api/auth";
-
+// Fungsi bantuan untuk menangkap error
+window.onerror = function(msg, url, line) {
+  alert("⚠️ ERROR TERDETEKSI:\n" + msg + "\n\nDi baris: " + line);
+  return false;
+};
 // ===== DEVICE ID =====
 function getDeviceId() {
   let id = localStorage.getItem('amprem_device');
