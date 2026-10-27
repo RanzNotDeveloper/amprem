@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "username": "ranzy",
+      "passwordHash": "$2a$10$kabrGXaZOc87NeEcCMPOpeq6eSfPHP4HnQEGsGRF/4AJmvzmJCZWu",
+      "role": "free",
+      "deviceId": "dev_buauca",
+      "email": "ranzy@admin.com",
+      "createdAt": "2026-10-27T21:46:09.955Z",
+      "expiredAt": null,
+      "adsWatched": 0
+    }
+  ]
+}
